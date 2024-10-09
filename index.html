@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head> <link rel="manifest" href="/manifest.json">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Fornecedores</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Encontre Fornecedores</h1>
+    </header>
+
+    <section id="formulario">
+        <h2>Cadastre-se como Fornecedor</h2>
+        <form id="cadastroForm">
+            <label for="nome">Nome da Empresa:</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="setor">Setor:</label>
+            <select id="setor" name="setor" required>
+                <option value="Alimentos">Alimentos</option>
+                <option value="Construção">Construção</option>
+                <option value="Moda">Moda</option>
+                <option value="Tecnologia">Tecnologia</option>
+            </select>
+
+            <label for="contato">Contato (WhatsApp/Email):</label>
+            <input type="text" id="contato" name="contato" required>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+    </section>
+
+    <section id="busca">
+        <h2>Busque um Fornecedor</h2>
+        <input type="text" id="buscaInput" placeholder="Buscar por nome ou setor...">
+        <ul id="listaFornecedores"></ul>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
+<script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('Service Worker registrado com sucesso.'))
+        .catch(error => console.log('Falha ao registrar o Service Worker:', error));
+    }
+  </script>
+  
