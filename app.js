@@ -60,3 +60,22 @@ document.getElementById('buscaInput').addEventListener('input', function(event) 
         lista.appendChild(li);
     });
 });
+
+// Função para filtrar fornecedores por setor ao clicar em um dos quadrados de setor
+function filtrarSetor(setor) {
+    const resultadosFiltrados = fornecedores.filter(fornecedor => fornecedor.setor === setor);
+
+    const lista = document.getElementById('listaFornecedores');
+    lista.innerHTML = ''; // Limpa a lista
+
+    resultadosFiltrados.forEach(fornecedor => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
+                        <strong>Setor:</strong> ${fornecedor.setor} <br>
+                        <strong>Contato:</strong> ${fornecedor.contato}`;
+        lista.appendChild(li);
+    });
+
+    // Opcional: atualiza o campo de busca com o setor selecionado
+    document.getElementById('buscaInput').value = setor;
+}

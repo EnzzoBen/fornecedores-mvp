@@ -14,7 +14,7 @@
 
     <section id="formulario">
         <h2>Cadastre-se como Fornecedor</h2>
-        <!-- Aqui está a modificação para o Formspree -->
+        <!-- Formulário para cadastro com o Formspree -->
         <form action="https://formspree.io/f/xrbgzjov" method="POST">
             <label for="nome">Nome da Empresa:</label>
             <input type="text" id="nome" name="nome" required>
@@ -25,6 +25,9 @@
                 <option value="Construção">Construção</option>
                 <option value="Moda">Moda</option>
                 <option value="Tecnologia">Tecnologia</option>
+                <option value="Automotivo">Automotivo</option>
+                <option value="Beleza">Beleza</option>
+                <option value="Móveis e Decoração">Móveis e Decoração</option>
             </select>
 
             <label for="contato">Contato (WhatsApp/Email):</label>
@@ -37,16 +40,67 @@
     <section id="busca">
         <h2>Busque um Fornecedor</h2>
         <input type="text" id="buscaInput" placeholder="Buscar por nome ou setor...">
-        <ul id="listaFornecedores"></ul>
+        
+        <!-- Blocos visuais para cada setor -->
+        <div id="setores">
+            <div class="setor" onclick="filtrarSetor('Alimentos')">
+                <img src="icones/alimentos.png" alt="Alimentos">
+                <p>Alimentos</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Construção')">
+                <img src="icones/construcao.png" alt="Construção">
+                <p>Construção</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Moda')">
+                <img src="icones/moda.png" alt="Moda">
+                <p>Moda</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Tecnologia')">
+                <img src="icones/tecnologia.png" alt="Tecnologia">
+                <p>Tecnologia</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Automotivo')">
+                <img src="icones/automotivo.png" alt="Automotivo">
+                <p>Automotivo</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Beleza')">
+                <img src="icones/beleza.png" alt="Beleza">
+                <p>Beleza e Cosméticos</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Móveis e Decoração')">
+                <img src="icones/moveis.png" alt="Móveis e Decoração">
+                <p>Móveis e Decoração</p>
+            </div>
+        </div>
     </section>
+
+    <ul id="listaFornecedores"></ul>
 
     <script src="app.js"></script>
 </body>
 </html>
+
 <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('Service Worker registrado com sucesso.'))
         .catch(error => console.log('Falha ao registrar o Service Worker:', error));
+    }
+
+    function filtrarSetor(setor) {
+        const resultadosFiltrados = fornecedores.filter(fornecedor => fornecedor.setor === setor);
+
+        const lista = document.getElementById('listaFornecedores');
+        lista.innerHTML = ''; // Limpa a lista
+
+        resultadosFiltrados.forEach(fornecedor => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
+                            <strong>Setor:</strong> ${fornecedor.setor} <br>
+                            <strong>Contato:</strong> ${fornecedor.contato}`;
+            lista.appendChild(li);
+        });
+
+        document.getElementById('buscaInput').value = setor;
     }
 </script>
