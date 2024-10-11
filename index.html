@@ -21,17 +21,40 @@
     <!-- Se o usuário escolher cliente ou fornecedor, ele será redirecionado -->
     <script>
         function irParaCliente() {
-            document.getElementById('formulario').style.display = 'none';
-            document.getElementById('busca').style.display = 'block';
+            document.getElementById('formularioCliente').style.display = 'block';
+            document.getElementById('formularioFornecedor').style.display = 'none';
+            document.getElementById('busca').style.display = 'none';
         }
 
         function irParaFornecedor() {
+            document.getElementById('formularioFornecedor').style.display = 'block';
+            document.getElementById('formularioCliente').style.display = 'none';
             document.getElementById('busca').style.display = 'none';
-            document.getElementById('formulario').style.display = 'block';
         }
     </script>
 
-    <section id="formulario" style="display: none;">
+    <!-- Formulário de Cadastro do Cliente -->
+    <section id="formularioCliente" style="display: none;">
+        <h2>Cadastre-se como Cliente</h2>
+        <form action="https://formspree.io/f/xrbgzjov" method="POST">
+            <label for="nomeCliente">Seu Nome:</label>
+            <input type="text" id="nomeCliente" name="nomeCliente" required>
+
+            <label for="emailCliente">Seu E-mail:</label>
+            <input type="email" id="emailCliente" name="emailCliente" required>
+
+            <label for="empresaCliente">Nome da Empresa (opcional):</label>
+            <input type="text" id="empresaCliente" name="empresaCliente">
+
+            <label for="contatoCliente">Contato (WhatsApp/Email):</label>
+            <input type="text" id="contatoCliente" name="contatoCliente" required>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+    </section>
+
+    <!-- Formulário de Cadastro do Fornecedor -->
+    <section id="formularioFornecedor" style="display: none;">
         <h2>Cadastre-se como Fornecedor</h2>
         <!-- Formulário para cadastro com o Formspree -->
         <form action="https://formspree.io/f/xrbgzjov" method="POST">
