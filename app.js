@@ -1,11 +1,11 @@
 // Armazena os fornecedores
 let fornecedores = [];
 
-// Captura o formulário de cadastro
+// Captura o formulário de cadastro de fornecedores
 document.getElementById('cadastroForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    // Captura os valores do formulário
+    // Captura os valores do formulário de fornecedores
     const nome = document.getElementById('nome').value;
     const setor = document.getElementById('setor').value;
     const contato = document.getElementById('contato').value;
@@ -26,6 +26,49 @@ document.getElementById('cadastroForm').addEventListener('submit', function(even
     // Limpa o formulário
     document.getElementById('cadastroForm').reset();
 });
+
+// Captura o formulário de cadastro de clientes
+document.getElementById('cadastroClienteForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Libera a busca de fornecedores
+    liberarBusca();
+
+    // Captura os valores do formulário de clientes
+    const nomeCliente = document.getElementById('nomeCliente').value;
+    const emailCliente = document.getElementById('emailCliente').value;
+    const empresaCliente = document.getElementById('empresaCliente').value;
+    const contatoCliente = document.getElementById('contatoCliente').value;
+
+    // Envia os dados para o Formspree (exemplo de integração simples com POST)
+    fetch('https://formspree.io/f/xrbgzjov', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            nome: nomeCliente,
+            email: emailCliente,
+            empresa: empresaCliente,
+            contato: contatoCliente
+        })
+    }).then(response => {
+        if (response.ok) {
+            alert('Cadastro enviado com sucesso!');
+        } else {
+            alert('Erro ao enviar o cadastro.');
+        }
+    });
+
+    // Limpa o formulário de cliente
+    document.getElementById('cadastroClienteForm').reset();
+});
+
+// Função para liberar a busca de fornecedores após cadastro do cliente
+function liberarBusca() {
+    document.getElementById('buscaDesabilitada').style.display = 'none';
+    document.getElementById('busca').style.display = 'block';
+}
 
 // Função para atualizar a lista de fornecedores
 function atualizarLista() {
