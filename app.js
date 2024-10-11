@@ -54,9 +54,10 @@ document.getElementById('cadastroClienteForm').addEventListener('submit', functi
         })
     }).then(response => {
         if (response.ok) {
-            alert('Cadastro enviado com sucesso!');
+            // Exibe uma mensagem de confirmação no mesmo formulário
+            document.getElementById('mensagemCliente').innerText = 'Cadastro enviado com sucesso!';
         } else {
-            alert('Erro ao enviar o cadastro.');
+            document.getElementById('mensagemCliente').innerText = 'Erro ao enviar o cadastro. Tente novamente.';
         }
     });
 
