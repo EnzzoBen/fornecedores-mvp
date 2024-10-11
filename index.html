@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MVP Fornecedores</title>
@@ -9,74 +8,25 @@
 </head>
 <body>
     <header>
-        <h1>Bem-vindo à Plataforma de Conexão</h1>
-        <p>Identifique-se para continuar:</p>
+        <h1>Bem-vindo ao MVP Fornecedores</h1>
     </header>
 
+    <!-- Escolha Cliente ou Fornecedor -->
     <section id="identificacao">
-        <button class="identificar" onclick="irParaCliente()">Sou Cliente</button>
-        <button class="identificar" onclick="irParaFornecedor()">Sou Fornecedor</button>
+        <h2>Como você gostaria de se identificar?</h2>
+        <button onclick="irParaCadastro('cliente')">Cliente</button>
+        <button onclick="irParaCadastro('fornecedor')">Fornecedor</button>
     </section>
 
-    <!-- Script para alternar entre os formulários -->
-    <script>
-        function irParaCliente() {
-            document.getElementById('formularioCliente').style.display = 'block';
-            document.getElementById('formularioFornecedor').style.display = 'none';
-            document.getElementById('buscaDesabilitada').style.display = 'block';
-        }
-
-        function irParaFornecedor() {
-            document.getElementById('formularioFornecedor').style.display = 'block';
-            document.getElementById('formularioCliente').style.display = 'none';
-            document.getElementById('buscaDesabilitada').style.display = 'none';
-        }
-
-        function liberarBusca() {
-            document.getElementById('buscaDesabilitada').style.display = 'none';
-            document.getElementById('busca').style.display = 'block';
-        }
-    </script>
-
-    <!-- Formulário de Cadastro do Cliente -->
-    <section id="formularioCliente" style="display: none;">
-        <h2>Cadastre-se como Cliente</h2>
-        <form id="cadastroClienteForm">
-            <label for="nomeCliente">Seu Nome:</label>
-            <input type="text" id="nomeCliente" name="nomeCliente" required>
-
-            <label for="emailCliente">Seu E-mail:</label>
-            <input type="email" id="emailCliente" name="emailCliente" required>
-
-            <label for="empresaCliente">Nome da Empresa (opcional):</label>
-            <input type="text" id="empresaCliente" name="empresaCliente">
-
-            <label for="contatoCliente">Contato (WhatsApp/Email):</label>
-            <input type="text" id="contatoCliente" name="contatoCliente" required>
-
-            <button type="submit">Cadastrar</button>
-        </form>
-
-        <!-- Div para exibir mensagem de sucesso ou erro -->
-        <div id="mensagemCliente" style="color: green; margin-top: 10px;"></div>
-
-        <!-- Seção de busca desabilitada inicialmente -->
-        <div id="buscaDesabilitada" class="desabilitado" style="display: block;">
-            <h2>Busque um Fornecedor</h2>
-            <p>Você precisa se cadastrar antes de acessar esta funcionalidade.</p>
-        </div>
-    </section>
-
-    <!-- Formulário de Cadastro do Fornecedor -->
-    <section id="formularioFornecedor" style="display: none;">
+    <!-- Formulário de Cadastro para Fornecedor -->
+    <section id="formularioFornecedor" class="oculto">
         <h2>Cadastre-se como Fornecedor</h2>
-        <!-- Formulário para cadastro com o Formspree -->
-        <form id="cadastroForm" action="https://formspree.io/f/xrbgzjov" method="POST">
-            <label for="nome">Nome da Empresa:</label>
-            <input type="text" id="nome" name="nome" required>
+        <form id="cadastroFornecedorForm">
+            <label for="nomeFornecedor">Nome da Empresa:</label>
+            <input type="text" id="nomeFornecedor" name="nome" required>
 
-            <label for="setor">Setor:</label>
-            <select id="setor" name="setor" required>
+            <label for="setorFornecedor">Setor:</label>
+            <select id="setorFornecedor" name="setor" required>
                 <option value="Alimentos">Alimentos</option>
                 <option value="Construção">Construção</option>
                 <option value="Moda">Moda</option>
@@ -86,52 +36,60 @@
                 <option value="Móveis e Decoração">Móveis e Decoração</option>
             </select>
 
-            <label for="contato">Contato (WhatsApp/Email):</label>
-            <input type="text" id="contato" name="contato" required>
+            <label for="contatoFornecedor">Contato (WhatsApp/Email):</label>
+            <input type="text" id="contatoFornecedor" name="contato" required>
 
-            <button type="submit">Cadastrar</button>
+            <button type="submit">Cadastrar Fornecedor</button>
         </form>
+        <p id="fornecedorSucesso" class="oculto">Fornecedor cadastrado com sucesso!</p>
     </section>
 
-    <!-- Seção de busca acessível após o cadastro -->
-    <section id="busca" style="display: none;">
-        <h2>Busque um Fornecedor</h2>
-        <input type="text" id="buscaInput" placeholder="Buscar por nome ou setor...">
-        
-        <div id="setores">
-            <div class="setor" onclick="filtrarSetor('Alimentos')">
-                <img src="icones/alimentos.png" alt="Alimentos">
-                <p>Alimentos</p>
-            </div>
-            <div class="setor" onclick="filtrarSetor('Construção')">
-                <img src="icones/construcao.png" alt="Construção">
-                <p>Construção</p>
-            </div>
-            <div class="setor" onclick="filtrarSetor('Moda')">
-                <img src="icones/moda.png" alt="Moda">
-                <p>Moda</p>
-            </div>
-            <div class="setor" onclick="filtrarSetor('Tecnologia')">
-                <img src="icones/tecnologia.png" alt="Tecnologia">
-                <p>Tecnologia</p>
-            </div>
-            <div class="setor" onclick="filtrarSetor('Automotivo')">
-                <img src="icones/automotivo.png" alt="Automotivo">
-                <p>Automotivo</p>
-            </div>
-            <div class="setor" onclick="filtrarSetor('Beleza')">
-                <img src="icones/beleza.png" alt="Beleza">
-                <p>Beleza e Cosméticos</p>
-            </div>
-            <div class="setor" onclick="filtrarSetor('Móveis e Decoração')">
-                <img src="icones/moveis.png" alt="Móveis e Decoração">
-                <p>Móveis e Decoração</p>
-            </div>
+    <!-- Formulário de Cadastro para Cliente -->
+    <section id="formularioCliente" class="oculto">
+        <h2>Cadastre-se como Cliente</h2>
+        <form id="cadastroClienteForm">
+            <label for="nomeCliente">Nome Completo:</label>
+            <input type="text" id="nomeCliente" name="nome" required>
+
+            <label for="emailCliente">Email:</label>
+            <input type="email" id="emailCliente" name="email" required>
+
+            <button type="submit">Cadastrar Cliente</button>
+        </form>
+        <p id="clienteSucesso" class="oculto">Cliente cadastrado com sucesso!</p>
+
+        <!-- Opção embaçada até cadastro -->
+        <div id="setoresClienteInacessivel" class="oculto">
+            <h2>Busque um Fornecedor (cadastro necessário)</h2>
+            <input type="text" id="buscaInputInativo" placeholder="Busque por nome ou setor" disabled>
+            <p>Cadastre-se para buscar fornecedores!</p>
         </div>
     </section>
 
-    <ul id="listaFornecedores"></ul>
+    <!-- Formulário enviado com sucesso -->
+    <section id="formularioSucesso" class="oculto">
+        <h2>Cadastro realizado com sucesso!</h2>
+        <p>Você será redirecionado em breve.</p>
+    </section>
 
     <script src="app.js"></script>
+
+    <!-- Firebase Setup -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script>
+      // Firebase config
+      var firebaseConfig = {
+        apiKey: "SUA_API_KEY",
+        authDomain: "SEU_AUTH_DOMAIN",
+        databaseURL: "SUA_DATABASE_URL",
+        projectId: "SEU_PROJECT_ID",
+        storageBucket: "SEU_STORAGE_BUCKET",
+        messagingSenderId: "SUA_MESSAGING_SENDER_ID",
+        appId: "SUA_APP_ID"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
 </body>
 </html>

@@ -1,61 +1,45 @@
-// Configuração Firebase
-const firebaseConfig = {
-    apiKey: "SUA_API_KEY_AQUI",
-    authDomain: "SEU_DOMINIO.firebaseapp.com",
-    databaseURL: "https://SEU_BANCO.firebaseio.com",
-    projectId: "SEU_ID_DO_PROJETO",
-    storageBucket: "SEU_BUCKET.appspot.com",
-    messagingSenderId: "SEU_ID_MENSAGEM",
-    appId: "SEU_ID_DO_APP"
-};
+// Funções de navegação
+function irParaCadastro(tipo) {
+    document.getElementById('identificacao').classList.add('oculto');
+    if (tipo === 'cliente') {
+        document.getElementById('formularioCliente').classList.remove('oculto');
+    } else if (tipo === 'fornecedor') {
+        document.getElementById('formularioFornecedor').classList.remove('oculto');
+    }
+}
 
-// Inicializando o Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Referência ao banco de dados
-const db = firebase.database();
-
-// Função para cadastrar fornecedor no Realtime Database
-document.getElementById('cadastroForm').addEventListener('submit', function(event) {
+// Cadastro Fornecedor
+document.getElementById('cadastroFornecedorForm').addEventListener('submit', function(event) {
     event.preventDefault();
+    const nome = document.getElementById('nomeFornecedor').value;
+    const setor = document.getElementById('setorFornecedor').value;
+    const contato = document.getElementById('contatoFornecedor').value;
 
-    const nome = document.getElementById('nome').value;
-    const setor = document.getElementById('setor').value;
-    const contato = document.getElementById('contato').value;
-
-    const novoFornecedorRef = db.ref('fornecedores').push();
-
-    novoFornecedorRef.set({
+    // Firebase Database - Cadastrar fornecedor
+    firebase.database().ref('fornecedores').push({
         nome: nome,
         setor: setor,
         contato: contato
-    })
-    .then(() => {
-        alert('Fornecedor cadastrado com sucesso!');
-        document.getElementById('cadastroForm').reset();
-    })
-    .catch(error => {
-        console.error('Erro ao cadastrar fornecedor: ', error);
     });
+
+    // Exibir sucesso e manter na tela
+    document.getElementById('formularioFornecedor').classList.add('oculto');
+    document.getElementById('formularioSucesso').classList.remove('oculto');
 });
 
-// Função para carregar fornecedores
-function carregarFornecedores() {
-    db.ref('fornecedores').on('value', (snapshot) => {
-        const fornecedores = snapshot.val();
-        const lista = document.getElementById('listaFornecedores');
-        lista.innerHTML = ''; // Limpa a lista
+// Cadastro Cliente
+document.getElementById('cadastroClienteForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const nome = document.getElementById('nomeCliente').value;
+    const email = document.getElementById('emailCliente').value;
 
-        for (const id in fornecedores) {
-            const fornecedor = fornecedores[id];
-            const li = document.createElement('li');
-            li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
-                            <strong>Setor:</strong> ${fornecedor.setor} <br>
-                            <strong>Contato:</strong> ${fornecedor.contato}`;
-            lista.appendChild(li);
-        }
+    // Firebase Database - Cadastrar cliente
+    firebase.database().ref('clientes').push({
+        nome: nome,
+        email: email
     });
-}
 
-// Carrega os fornecedores ao abrir a página
-carregarFornecedores();
+    // Exibir sucesso e manter na tela
+    document.getElementById('formularioCliente').classList.add('oculto');
+    document.getElementById('formularioSucesso').classList.remove('oculto');
+});
