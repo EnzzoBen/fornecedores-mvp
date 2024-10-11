@@ -1,127 +1,61 @@
-// Armazena os fornecedores
-let fornecedores = [];
+// Configuração Firebase
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY_AQUI",
+    authDomain: "SEU_DOMINIO.firebaseapp.com",
+    databaseURL: "https://SEU_BANCO.firebaseio.com",
+    projectId: "SEU_ID_DO_PROJETO",
+    storageBucket: "SEU_BUCKET.appspot.com",
+    messagingSenderId: "SEU_ID_MENSAGEM",
+    appId: "SEU_ID_DO_APP"
+};
 
-// Captura o formulário de cadastro de fornecedores
+// Inicializando o Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Referência ao banco de dados
+const db = firebase.database();
+
+// Função para cadastrar fornecedor no Realtime Database
 document.getElementById('cadastroForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    // Captura os valores do formulário de fornecedores
     const nome = document.getElementById('nome').value;
     const setor = document.getElementById('setor').value;
     const contato = document.getElementById('contato').value;
 
-    // Cria um objeto fornecedor
-    const fornecedor = {
+    const novoFornecedorRef = db.ref('fornecedores').push();
+
+    novoFornecedorRef.set({
         nome: nome,
         setor: setor,
         contato: contato
-    };
-
-    // Adiciona o fornecedor à lista
-    fornecedores.push(fornecedor);
-
-    // Atualiza a lista de fornecedores
-    atualizarLista();
-
-    // Limpa o formulário
-    document.getElementById('cadastroForm').reset();
+    })
+    .then(() => {
+        alert('Fornecedor cadastrado com sucesso!');
+        document.getElementById('cadastroForm').reset();
+    })
+    .catch(error => {
+        console.error('Erro ao cadastrar fornecedor: ', error);
+    });
 });
 
-// Captura o formulário de cadastro de clientes
-document.getElementById('cadastroClienteForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+// Função para carregar fornecedores
+function carregarFornecedores() {
+    db.ref('fornecedores').on('value', (snapshot) => {
+        const fornecedores = snapshot.val();
+        const lista = document.getElementById('listaFornecedores');
+        lista.innerHTML = ''; // Limpa a lista
 
-    // Libera a busca de fornecedores
-    liberarBusca();
-
-    // Captura os valores do formulário de clientes
-    const nomeCliente = document.getElementById('nomeCliente').value;
-    const emailCliente = document.getElementById('emailCliente').value;
-    const empresaCliente = document.getElementById('empresaCliente').value;
-    const contatoCliente = document.getElementById('contatoCliente').value;
-
-    // Envia os dados para o Formspree via AJAX (sem redirecionamento)
-    fetch('https://formspree.io/f/xrbgzjov', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            nome: nomeCliente,
-            email: emailCliente,
-            empresa: empresaCliente,
-            contato: contatoCliente
-        })
-    }).then(response => {
-        if (response.ok) {
-            // Exibe uma mensagem de confirmação no mesmo formulário
-            document.getElementById('mensagemCliente').innerText = 'Cadastro enviado com sucesso!';
-            document.getElementById('mensagemCliente').style.color = 'green';
-        } else {
-            document.getElementById('mensagemCliente').innerText = 'Erro ao enviar o cadastro. Tente novamente.';
-            document.getElementById('mensagemCliente').style.color = 'red';
+        for (const id in fornecedores) {
+            const fornecedor = fornecedores[id];
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
+                            <strong>Setor:</strong> ${fornecedor.setor} <br>
+                            <strong>Contato:</strong> ${fornecedor.contato}`;
+            lista.appendChild(li);
         }
     });
-
-    // Limpa o formulário de cliente
-    document.getElementById('cadastroClienteForm').reset();
-});
-
-// Função para liberar a busca de fornecedores após cadastro do cliente
-function liberarBusca() {
-    document.getElementById('buscaDesabilitada').style.display = 'none';
-    document.getElementById('busca').style.display = 'block';
 }
 
-// Função para atualizar a lista de fornecedores
-function atualizarLista() {
-    const lista = document.getElementById('listaFornecedores');
-    lista.innerHTML = ''; // Limpa a lista
-
-    fornecedores.forEach(fornecedor => {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
-                        <strong>Setor:</strong> ${fornecedor.setor} <br>
-                        <strong>Contato:</strong> ${fornecedor.contato}`;
-        lista.appendChild(li);
-    });
-}
-
-// Função de busca
-document.getElementById('buscaInput').addEventListener('input', function(event) {
-    const buscaTermo = event.target.value.toLowerCase();
-
-    const resultadosFiltrados = fornecedores.filter(fornecedor => {
-        return fornecedor.nome.toLowerCase().includes(buscaTermo) || fornecedor.setor.toLowerCase().includes(buscaTermo);
-    });
-
-    const lista = document.getElementById('listaFornecedores');
-    lista.innerHTML = ''; // Limpa a lista
-
-    resultadosFiltrados.forEach(fornecedor => {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
-                        <strong>Setor:</strong> ${fornecedor.setor} <br>
-                        <strong>Contato:</strong> ${fornecedor.contato}`;
-        lista.appendChild(li);
-    });
-});
-
-// Função para filtrar fornecedores por setor ao clicar em um dos quadrados de setor
-function filtrarSetor(setor) {
-    const resultadosFiltrados = fornecedores.filter(fornecedor => fornecedor.setor === setor);
-
-    const lista = document.getElementById('listaFornecedores');
-    lista.innerHTML = ''; // Limpa a lista
-
-    resultadosFiltrados.forEach(fornecedor => {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
-                        <strong>Setor:</strong> ${fornecedor.setor} <br>
-                        <strong>Contato:</strong> ${fornecedor.contato}`;
-        lista.appendChild(li);
-    });
-
-    // Opcional: atualiza o campo de busca com o setor selecionado
-    document.getElementById('buscaInput').value = setor;
-}
+// Carrega os fornecedores ao abrir a página
+carregarFornecedores();
