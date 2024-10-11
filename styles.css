@@ -67,16 +67,14 @@ ul#listaFornecedores li {
 /* Estilos para os quadrados dos setores */
 #setores {
     display: flex;
-    flex-wrap: nowrap; /* Mantém todos os itens em uma linha */
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
     margin-top: 20px;
-    overflow-x: auto; /* Habilita o scroll horizontal */
-    padding-bottom: 10px; /* Espaço extra para evitar que o conteúdo fique cortado */
 }
 
 .setor {
-    min-width: 150px; /* Define um tamanho mínimo fixo para cada setor */
+    width: 150px;
     height: 150px;
     display: flex;
     flex-direction: column;
@@ -96,50 +94,31 @@ ul#listaFornecedores li {
 .setor p {
     margin-top: 10px;
     font-size: 16px;
+}
+
+.setor:hover {
+    transform: scale(1.1);
+    border-color: #4CAF50;
+}
+
+/* Estilos para a tela de identificação */
+#identificacao {
     text-align: center;
+    margin-top: 50px;
 }
 
-.setor:hover {
-    transform: scale(1.1);
-    border-color: #4CAF50;
+button.identificar {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    margin: 10px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-/* Adiciona responsividade para telas menores */
-@media (max-width: 600px) {
-    .setor {
-        width: 120px;
-        height: 120px;
-    }
-
-    .setor img {
-        width: 40px;
-        height: 40px;
-    }
-
-    .setor p {
-        font-size: 14px;
-    }
-}
-
-
-.setor:hover {
-    transform: scale(1.1);
-    border-color: #4CAF50;
-}
-
-/* Adiciona responsividade para telas menores */
-@media (max-width: 600px) {
-    .setor {
-        width: 120px;
-        height: 120px;
-    }
-
-    .setor img {
-        width: 40px;
-        height: 40px;
-    }
-
-    .setor p {
-        font-size: 14px;
-    }
+button.identificar:hover {
+    background-color: #45a049;
 }

@@ -9,10 +9,29 @@
 </head>
 <body>
     <header>
-        <h1>Encontre Fornecedores</h1>
+        <h1>Bem-vindo à Plataforma de Conexão</h1>
+        <p>Identifique-se para continuar:</p>
     </header>
 
-    <section id="formulario">
+    <section id="identificacao">
+        <button class="identificar" onclick="irParaCliente()">Sou Cliente</button>
+        <button class="identificar" onclick="irParaFornecedor()">Sou Fornecedor</button>
+    </section>
+
+    <!-- Se o usuário escolher cliente ou fornecedor, ele será redirecionado -->
+    <script>
+        function irParaCliente() {
+            document.getElementById('formulario').style.display = 'none';
+            document.getElementById('busca').style.display = 'block';
+        }
+
+        function irParaFornecedor() {
+            document.getElementById('busca').style.display = 'none';
+            document.getElementById('formulario').style.display = 'block';
+        }
+    </script>
+
+    <section id="formulario" style="display: none;">
         <h2>Cadastre-se como Fornecedor</h2>
         <!-- Formulário para cadastro com o Formspree -->
         <form action="https://formspree.io/f/xrbgzjov" method="POST">
@@ -37,7 +56,7 @@
         </form>
     </section>
 
-    <section id="busca">
+    <section id="busca" style="display: none;">
         <h2>Busque um Fornecedor</h2>
         <input type="text" id="buscaInput" placeholder="Buscar por nome ou setor...">
         
@@ -79,28 +98,3 @@
     <script src="app.js"></script>
 </body>
 </html>
-
-<script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('Service Worker registrado com sucesso.'))
-        .catch(error => console.log('Falha ao registrar o Service Worker:', error));
-    }
-
-    function filtrarSetor(setor) {
-        const resultadosFiltrados = fornecedores.filter(fornecedor => fornecedor.setor === setor);
-
-        const lista = document.getElementById('listaFornecedores');
-        lista.innerHTML = ''; // Limpa a lista
-
-        resultadosFiltrados.forEach(fornecedor => {
-            const li = document.createElement('li');
-            li.innerHTML = `<strong>Nome:</strong> ${fornecedor.nome} <br>
-                            <strong>Setor:</strong> ${fornecedor.setor} <br>
-                            <strong>Contato:</strong> ${fornecedor.contato}`;
-            lista.appendChild(li);
-        });
-
-        document.getElementById('buscaInput').value = setor;
-    }
-</script>
