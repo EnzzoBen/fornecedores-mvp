@@ -122,3 +122,14 @@ button.identificar {
 button.identificar:hover {
     background-color: #45a049;
 }
+
+/* Desfoque na área de busca até o cadastro ser concluído */
+.desabilitado {
+    opacity: 0.5;
+    filter: blur(3px);
+    pointer-events: none;
+}
+
+#busca {
+    display: none;
+}
