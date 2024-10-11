@@ -18,6 +18,7 @@
         <button class="identificar" onclick="irParaFornecedor()">Sou Fornecedor</button>
     </section>
 
+    <!-- Script para alternar entre os formulários -->
     <script>
         function irParaCliente() {
             document.getElementById('formularioCliente').style.display = 'block';
@@ -38,10 +39,9 @@
     </script>
 
     <!-- Formulário de Cadastro do Cliente -->
-    <div id="mensagemCliente" style="color: green;"></div>
     <section id="formularioCliente" style="display: none;">
         <h2>Cadastre-se como Cliente</h2>
-        <form action="https://formspree.io/f/xrbgzjov" method="POST" onsubmit="liberarBusca();">
+        <form id="cadastroClienteForm">
             <label for="nomeCliente">Seu Nome:</label>
             <input type="text" id="nomeCliente" name="nomeCliente" required>
 
@@ -57,6 +57,9 @@
             <button type="submit">Cadastrar</button>
         </form>
 
+        <!-- Div para exibir mensagem de sucesso ou erro -->
+        <div id="mensagemCliente" style="color: green; margin-top: 10px;"></div>
+
         <!-- Seção de busca desabilitada inicialmente -->
         <div id="buscaDesabilitada" class="desabilitado" style="display: block;">
             <h2>Busque um Fornecedor</h2>
@@ -67,7 +70,8 @@
     <!-- Formulário de Cadastro do Fornecedor -->
     <section id="formularioFornecedor" style="display: none;">
         <h2>Cadastre-se como Fornecedor</h2>
-        <form action="https://formspree.io/f/xrbgzjov" method="POST">
+        <!-- Formulário para cadastro com o Formspree -->
+        <form id="cadastroForm" action="https://formspree.io/f/xrbgzjov" method="POST">
             <label for="nome">Nome da Empresa:</label>
             <input type="text" id="nome" name="nome" required>
 

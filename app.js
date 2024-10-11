@@ -40,7 +40,7 @@ document.getElementById('cadastroClienteForm').addEventListener('submit', functi
     const empresaCliente = document.getElementById('empresaCliente').value;
     const contatoCliente = document.getElementById('contatoCliente').value;
 
-    // Envia os dados para o Formspree (exemplo de integração simples com POST)
+    // Envia os dados para o Formspree via AJAX (sem redirecionamento)
     fetch('https://formspree.io/f/xrbgzjov', {
         method: 'POST',
         headers: {
@@ -56,8 +56,10 @@ document.getElementById('cadastroClienteForm').addEventListener('submit', functi
         if (response.ok) {
             // Exibe uma mensagem de confirmação no mesmo formulário
             document.getElementById('mensagemCliente').innerText = 'Cadastro enviado com sucesso!';
+            document.getElementById('mensagemCliente').style.color = 'green';
         } else {
             document.getElementById('mensagemCliente').innerText = 'Erro ao enviar o cadastro. Tente novamente.';
+            document.getElementById('mensagemCliente').style.color = 'red';
         }
     });
 
