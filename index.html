@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MVP Fornecedores</title>
@@ -8,25 +9,18 @@
 </head>
 <body>
     <header>
-        <h1>Bem-vindo ao MVP Fornecedores</h1>
+        <h1>Encontre Fornecedores</h1>
     </header>
 
-    <!-- Escolha Cliente ou Fornecedor -->
-    <section id="identificacao">
-        <h2>Como você gostaria de se identificar?</h2>
-        <button onclick="irParaCadastro('cliente')">Cliente</button>
-        <button onclick="irParaCadastro('fornecedor')">Fornecedor</button>
-    </section>
-
-    <!-- Formulário de Cadastro para Fornecedor -->
-    <section id="formularioFornecedor" class="oculto">
+    <section id="formulario">
         <h2>Cadastre-se como Fornecedor</h2>
-        <form id="cadastroFornecedorForm">
-            <label for="nomeFornecedor">Nome da Empresa:</label>
-            <input type="text" id="nomeFornecedor" name="nome" required>
+        <!-- Formulário para cadastro com o Formspree -->
+        <form action="https://formspree.io/f/xrbgzjov" method="POST">
+            <label for="nome">Nome da Empresa:</label>
+            <input type="text" id="nome" name="nome" required>
 
-            <label for="setorFornecedor">Setor:</label>
-            <select id="setorFornecedor" name="setor" required>
+            <label for="setor">Setor:</label>
+            <select id="setor" name="setor" required>
                 <option value="Alimentos">Alimentos</option>
                 <option value="Construção">Construção</option>
                 <option value="Moda">Moda</option>
@@ -36,60 +30,77 @@
                 <option value="Móveis e Decoração">Móveis e Decoração</option>
             </select>
 
-            <label for="contatoFornecedor">Contato (WhatsApp/Email):</label>
-            <input type="text" id="contatoFornecedor" name="contato" required>
+            <label for="contato">Contato (WhatsApp/Email):</label>
+            <input type="text" id="contato" name="contato" required>
 
-            <button type="submit">Cadastrar Fornecedor</button>
+            <button type="submit">Cadastrar</button>
         </form>
-        <p id="fornecedorSucesso" class="oculto">Fornecedor cadastrado com sucesso!</p>
     </section>
 
-    <!-- Formulário de Cadastro para Cliente -->
-    <section id="formularioCliente" class="oculto">
-        <h2>Cadastre-se como Cliente</h2>
-        <form id="cadastroClienteForm">
-            <label for="nomeCliente">Nome Completo:</label>
-            <input type="text" id="nomeCliente" name="nome" required>
-
-            <label for="emailCliente">Email:</label>
-            <input type="email" id="emailCliente" name="email" required>
-
-            <button type="submit">Cadastrar Cliente</button>
-        </form>
-        <p id="clienteSucesso" class="oculto">Cliente cadastrado com sucesso!</p>
-
-        <!-- Opção embaçada até cadastro -->
-        <div id="setoresClienteInacessivel" class="oculto">
-            <h2>Busque um Fornecedor (cadastro necessário)</h2>
-            <input type="text" id="buscaInputInativo" placeholder="Busque por nome ou setor" disabled>
-            <p>Cadastre-se para buscar fornecedores!</p>
+    <section id="busca">
+        <h2>Busque um Fornecedor</h2>
+        <input type="text" id="buscaInput" placeholder="Buscar por nome ou setor...">
+        
+        <!-- Blocos visuais para cada setor -->
+        <div id="setores">
+            <div class="setor" onclick="filtrarSetor('Alimentos')">
+                <img src="icones/alimentos.png" alt="Alimentos">
+                <p>Alimentos</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Construção')">
+                <img src="icones/construcao.png" alt="Construção">
+                <p>Construção</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Moda')">
+                <img src="icones/moda.png" alt="Moda">
+                <p>Moda</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Tecnologia')">
+                <img src="icones/tecnologia.png" alt="Tecnologia">
+                <p>Tecnologia</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Automotivo')">
+                <img src="icones/automotivo.png" alt="Automotivo">
+                <p>Automotivo</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Beleza')">
+                <img src="icones/beleza.png" alt="Beleza">
+                <p>Beleza e Cosméticos</p>
+            </div>
+            <div class="setor" onclick="filtrarSetor('Móveis e Decoração')">
+                <img src="icones/moveis.png" alt="Móveis e Decoração">
+                <p>Móveis e Decoração</p>
+            </div>
         </div>
     </section>
 
-    <!-- Formulário enviado com sucesso -->
-    <section id="formularioSucesso" class="oculto">
-        <h2>Cadastro realizado com sucesso!</h2>
-        <p>Você será redirecionado em breve.</p>
-    </section>
+    <ul id="listaFornecedores"></ul>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTtx78Cw0H25bjLtO0z_JZR6FmYk5SY9A",
+            authDomain: "database-mvp-73927.firebaseapp.com",
+            databaseURL: "https://database-mvp-73927-default-rtdb.firebaseio.com",
+            projectId: "database-mvp-73927",
+            storageBucket: "database-mvp-73927.appspot.com",
+            messagingSenderId: "988396083709",
+            appId: "1:988396083709:web:0157e80c656c4336b1e194",
+            measurementId: "G-51R9GELJMJ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 
     <script src="app.js"></script>
-
-    <!-- Firebase Setup -->
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-    <script>
-      // Firebase config
-      var firebaseConfig = {
-        apiKey: "SUA_API_KEY",
-        authDomain: "SEU_AUTH_DOMAIN",
-        databaseURL: "SUA_DATABASE_URL",
-        projectId: "SEU_PROJECT_ID",
-        storageBucket: "SEU_STORAGE_BUCKET",
-        messagingSenderId: "SUA_MESSAGING_SENDER_ID",
-        appId: "SUA_APP_ID"
-      };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-    </script>
 </body>
 </html>
